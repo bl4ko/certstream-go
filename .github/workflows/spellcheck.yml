@@ -1,0 +1,11 @@
+name: Check spelling with spellcheck
+on:
+  pull_request:
+    branches:
+      - main
+jobs:
+  spellcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+      - uses: streetsidesoftware/cspell-action@0e63b882c2ef0e24d78b8b1fbb132b42c0a0d0cb # v6

@@ -1,0 +1,59 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "baseBranches": [
+    "main"
+  ],
+  "extends": [
+    "config:recommended",
+    "docker:pinDigests",
+    "helpers:pinGitHubActionDigests",
+    ":pinDevDependencies"
+  ],
+  "packageRules": [
+    {
+      "automerge": true,
+      "groupName": "go dependencies",
+      "matchManagers": [
+        "gomod"
+      ]
+    },
+    {
+      "automerge": true,
+      "groupName": "github actions",
+      "matchManagers": [
+        "github-actions"
+      ]
+    },
+    {
+      "automerge": true,
+      "groupName": "dockerfile dependencies",
+      "matchManagers": [
+        "dockerfile"
+      ]
+    },
+    {
+      "automerge": true,
+      "automergeStrategy": "rebase",
+      "groupName": "semantic-release",
+      "matchManagers": [
+        "regex"
+      ]
+    }
+  ],
+  "pre-commit": {
+    "enabled": true
+  },
+  "regexManagers": [
+    {
+      "datasourceTemplate": "npm",
+      "depNameTemplate": "semantic-release",
+      "description": "Update semantic-release version used by npx",
+      "fileMatch": [
+        "^\\.github/workflows/[^/]+\\.ya?ml$"
+      ],
+      "matchStrings": [
+        "\\srun: npx semantic-release@(?<currentValue>.*?)\\s"
+      ]
+    }
+  ]
+}

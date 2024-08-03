@@ -1,0 +1,89 @@
+name: Continious integration
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  tests:
+    name: Run tests and upload results
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go-version: ["1.21", "1.22"]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+
+      # This is currently workaround for checking if gofiles have changed,
+      # Because paths filter doesn't work with required checks
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@c65cd883420fd2eb864698a825fc4162dd94482c # v44
+        with:
+          files: |
+            cmd/**
+            internal/**
+            .golangci.yml
+            go.mod
+            go.sum
+
+      - name: Setup Go
+        if: steps.changed-files.outputs.any_modified == 'true'
+        uses: actions/setup-go@0a12ed9d6a96ab950c8f026ed9f722fe0da7ef32 # v5
+        with:
+          go-version: ${{ matrix.go-version }}
+
+      - name: golangci-lint
+        if: steps.changed-files.outputs.any_modified == 'true'
+        uses: golangci/golangci-lint-action@aaa42aa0628b4ae2578232a66b541047968fac86 # v6
+        with:
+          version: latest
+          args: --timeout=5m
+
+      - name: Install dependencies
+        if: steps.changed-files.outputs.any_modified == 'true'
+        run: go mod download
+
+      - name: Test with Go
+        if: steps.changed-files.outputs.any_modified == 'true'
+        run: go test -race -coverprofile=coverage.txt -covermode=atomic ./...
+
+      - name: Upload coverage reports to Codecov
+        if: steps.changed-files.outputs.any_modified == 'true'
+        uses: codecov/codecov-action@e28ff129e5465c2c0dcc6f003fc735cb6ae0c673 # v4.5.0
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: cover.txt
+          slug: bl4ko/netbox-ssot
+
+  vulnerabilities:
+    name: Check for vulnerabilities
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@c65cd883420fd2eb864698a825fc4162dd94482c # v44
+        with:
+          files: |
+            cmd/**
+            internal/**
+            .golangci.yml
+            go.mod
+            go.sum
+            .dockerignore
+            Dockerfile
+
+      - name: Run Trivy vulnerability scanner
+        if: steps.changed-files.outputs.any_modified == 'true'
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'

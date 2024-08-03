@@ -1,0 +1,80 @@
+linters-settings:
+  misspell:
+    locale: US
+
+issues:
+  max-issues-per-linter: 50
+  max-same-issues: 20
+
+linters:
+  enable:
+    - revive
+    - gocyclo
+    - dupl
+    - errorlint
+    - gocognit
+    - cyclop
+    - paralleltest
+    - lll
+    - nestif
+    - maintidx
+    - exhaustive
+    - nilnil
+    - gochecknoglobals
+    - goerr113
+    - ireturn
+    - containedctx
+    - gosec
+    - gocritic
+    - asasalint
+    - asciicheck
+    - bidichk
+    - bodyclose
+    - decorder
+    - dogsled
+    - dupword
+    - durationcheck
+    - errchkjson
+    - errname
+    - execinquery
+    - exportloopref
+    - forcetypeassert
+    - gci
+    - gocheckcompilerdirectives
+    - gochecknoinits
+    - goconst
+    - godot
+    - goheader
+    - goimports
+    - gomnd
+    - gomoddirectives
+    - goprintffuncname
+    - gosmopolitan
+    - grouper
+    - importas
+    - interfacebloat
+    - makezero
+    - mirror
+    - misspell
+    - musttag
+    - nakedret
+    - nilerr
+    - noctx
+    - nolintlint
+    - nosprintfhostport
+    - prealloc
+    - predeclared
+    - promlinter
+    - reassign
+    - rowserrcheck
+    - sqlclosecheck
+    - tagalign
+    - tenv
+    - thelper
+    - tparallel
+    - unconvert
+    - unparam
+    - usestdlibvars
+    - wastedassign
+    - whitespace
+    - zerologlint
