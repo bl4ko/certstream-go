@@ -1,6 +1,8 @@
 # Certstream-go
 
-Simple go client library for interacting with the cerstream logs, inspired by [CaliDog](https://github.com/CaliDog/certstream-go).
+Simplified and maintained version of [CaliDog's certstream client](https://github.com/CaliDog/certstream-go).
+
+> It is recommended to be used with [self hosted certstream server](https://github.com/d-Rickyy-b/certstream-server-go).
 
 # Usage
 
@@ -14,7 +16,7 @@ import (
 )
 
 func main() {
-	certstreamServerURL := "wss://certstream.calidog.io"
+	certstreamServerURL := "wss://certstream.calidog.io" // or selfhosted
 	timeout := 15
 	stream, errStream := certstream.EventStream(true, certstreamServerURL, timeout)
 	for {

@@ -63,6 +63,16 @@ type Source struct {
 	URL  string `json:"url"`
 }
 
+// EventStream establishes a connection to the CertStream server and returns two channels:
+//
+//	outputStream: a channel to receive CertStream messages
+//	errStream: a channel to receive any errors that occur during the connection
+//
+// The function takes the following parameters:
+//
+//	skipHeartbeats: a boolean indicating whether to skip heartbeat messages
+//	certstreamServerURL: the URL of the CertStream server
+//	timeout: the timeout duration in seconds (0 for default timeout)
 func EventStream(skipHeartbeats bool, certstreamServerURL string, timeout int) (chan Message, chan error) {
 	if timeout == 0 {
 		timeout = DefaultTimeout
